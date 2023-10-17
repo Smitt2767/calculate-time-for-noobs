@@ -39,12 +39,12 @@ function App() {
     remainingHours: "",
   });
 
-  const { control, register, handleSubmit, reset } = useForm({
+  const { control, register, handleSubmit } = useForm({
     defaultValues,
     mode: "all",
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "entries",
   });
@@ -64,15 +64,13 @@ function App() {
         currentDate.getMonth() === checkDate.getMonth() &&
         currentDate.getDate() === checkDate.getDate()
       ) {
-        reset({
-          entries: info.entries,
-        });
+        replace(info.entries);
         setLogInfo(info.logInfo);
       } else {
         Storage.remove("log_info");
       }
     }
-  }, [reset]);
+  }, [replace]);
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({ entries }) => {
     let completedMinutes = 0;
@@ -120,6 +118,8 @@ function App() {
   const handleAddLog = () => {
     append([[null, null]]);
   };
+
+  console.log(fields);
 
   return (
     <AppWrapper>
