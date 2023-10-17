@@ -21,7 +21,6 @@ export const getHoursAndMinutes = (minutes: number) => {
 
 export const getHoursMinutesText = (minutes: number) => {
   const { h, m } = getHoursAndMinutes(Math.abs(minutes));
-  console.log(h, m);
   return `${Math.sign(minutes) === -1 ? "-" : ""}${h}h ${m
     .toString()
     .padStart(2, "0")}m`;
@@ -48,3 +47,16 @@ export const getEndTime = (startTime: string, remainingMinutes: number) => {
     return "";
   }
 };
+
+type StorageKeys = "log_info";
+export class Storage {
+  static get<T>(key: StorageKeys) {
+    return JSON.parse(localStorage.getItem(key) ?? "null") as T | null;
+  }
+  static set(key: StorageKeys, value: unknown) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+  static remove(key: StorageKeys) {
+    localStorage.removeItem(key);
+  }
+}

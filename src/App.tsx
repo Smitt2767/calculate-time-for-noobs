@@ -13,11 +13,12 @@ import { ReactComponent as ArrowDownLeft } from "./assets/icons/arrow-down-left-
 import { ReactComponent as ArrowUpRight } from "./assets/icons/arrow-up-right-thin.svg";
 import { ReactComponent as Trash } from "./assets/icons/trash-thin.svg";
 import {
+  Storage,
   getDifferenceInMinutes,
   getEndTime,
   getHoursMinutesText,
 } from "./utils";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import LogInfo, { LogInfoProps } from "./components/LogInfo";
 
 const TOTAL_MINUTES = 8 * 60 + 30;
@@ -38,7 +39,7 @@ function App() {
     remainingHours: "",
   });
 
-  const { control, register, handleSubmit } = useForm({
+  const { control, register, handleSubmit, reset } = useForm({
     defaultValues,
     mode: "all",
   });
@@ -47,6 +48,31 @@ function App() {
     control,
     name: "entries",
   });
+
+  useLayoutEffect(() => {
+    const info = Storage.get<{
+      date: string;
+      entries: Entry[];
+      logInfo: LogInfoProps;
+    }>("log_info");
+
+    if (info) {
+      const checkDate = new Date(info.date);
+      const currentDate = new Date();
+      if (
+        currentDate.getFullYear() === checkDate.getFullYear() &&
+        currentDate.getMonth() === checkDate.getMonth() &&
+        currentDate.getDate() === checkDate.getDate()
+      ) {
+        reset({
+          entries: info.entries,
+        });
+        setLogInfo(info.logInfo);
+      } else {
+        Storage.remove("log_info");
+      }
+    }
+  }, [reset]);
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({ entries }) => {
     let completedMinutes = 0;
@@ -75,11 +101,19 @@ function App() {
     const endTime =
       lastInLog && !lastOutLog ? getEndTime(lastInLog, remainingMinutes) : "";
 
-    setLogInfo({
+    const info = {
       effectiveHours: getHoursMinutesText(effectiveMinutes),
       grossHours: getHoursMinutesText(grossMinutes),
       remainingHours: getHoursMinutesText(remainingMinutes),
       endTime,
+    };
+
+    setLogInfo(info);
+
+    Storage.set("log_info", {
+      date: new Date(),
+      entries,
+      logInfo: info,
     });
   };
 
