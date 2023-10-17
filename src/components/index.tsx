@@ -74,6 +74,8 @@ export const InputWrapper = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex-grow: 1;
+  flex-shrink: 0;
 `;
 
 export const FormItem = styled.div`
