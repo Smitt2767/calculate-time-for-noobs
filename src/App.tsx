@@ -119,8 +119,6 @@ function App() {
     append([[null, null]]);
   };
 
-  console.log(fields);
-
   return (
     <AppWrapper>
       <Container>
