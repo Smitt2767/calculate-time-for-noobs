@@ -9,13 +9,8 @@ export const AppWrapper = styled.div`
 
 export const Title = styled.h1`
   font-size: 20px;
-  background: -webkit-linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.1)
-  );
+  color: #ffffff8d;
   flex-grow: 1;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 `;
 
 export const Container = styled.div`
