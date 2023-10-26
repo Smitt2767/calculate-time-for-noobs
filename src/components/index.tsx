@@ -43,6 +43,7 @@ type ButtonProps = {
   $transparent?: boolean;
   $size?: "default" | "lg";
   $hidden?: boolean;
+  $fullWidth?: boolean;
 };
 
 export const Button = styled.button<ButtonProps>`
@@ -74,6 +75,11 @@ export const Button = styled.button<ButtonProps>`
     css`
       pointer-events: none;
       visibility: hidden;
+    `}
+  ${({ $fullWidth }) =>
+    $fullWidth &&
+    css`
+      width: 100%;
     `}
 `;
 

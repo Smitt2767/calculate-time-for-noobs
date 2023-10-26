@@ -36,15 +36,17 @@ const defaultValues: {
   entries: [[null, null]],
 };
 
-function App() {
-  const [logInfo, setLogInfo] = useState<LogInfoProps>({
-    effectiveHours: "",
-    endTime: "",
-    grossHours: "",
-    remainingHours: "",
-  });
+const defaultLogInfo: LogInfoProps = {
+  effectiveHours: "",
+  endTime: "",
+  grossHours: "",
+  remainingHours: "",
+};
 
-  const { control, register, handleSubmit } = useForm({
+function App() {
+  const [logInfo, setLogInfo] = useState<LogInfoProps>(defaultLogInfo);
+
+  const { control, register, handleSubmit, reset } = useForm({
     defaultValues,
     mode: "all",
   });
@@ -60,20 +62,9 @@ function App() {
       entries: Entry[];
       logInfo: LogInfoProps;
     }>("log_info");
-
     if (info) {
-      const checkDate = new Date(info.date);
-      const currentDate = new Date();
-      if (
-        currentDate.getFullYear() === checkDate.getFullYear() &&
-        currentDate.getMonth() === checkDate.getMonth() &&
-        currentDate.getDate() === checkDate.getDate()
-      ) {
-        replace(info.entries);
-        setLogInfo(info.logInfo);
-      } else {
-        Storage.remove("log_info");
-      }
+      replace(info.entries);
+      setLogInfo(info.logInfo);
     }
   }, [replace]);
 
@@ -125,6 +116,12 @@ function App() {
     append([[null, null]]);
   };
 
+  const handleReset = () => {
+    reset();
+    setLogInfo(defaultLogInfo);
+    Storage.remove("log_info");
+  };
+
   return (
     <AppWrapper>
       <Container>
@@ -165,13 +162,23 @@ function App() {
               </Button>
             </FormItem>
           ))}
-          <div style={{ display: "flex", gap: 12 }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 16,
+              justifyContent: "space-between",
+            }}
+          >
             <Button type="button" onClick={handleAddLog}>
               Add Log
             </Button>
+            <Button type="button" onClick={handleReset}>
+              Clear all Logs
+            </Button>
           </div>
         </Form>
-        <Button $size="lg" type="submit" form="track-log-form">
+
+        <Button $fullWidth $size="lg" type="submit" form="track-log-form">
           Calculate
         </Button>
       </Container>
