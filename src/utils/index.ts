@@ -1,46 +1,44 @@
-export const getDifferenceInMinutes = (
-  startTime: string,
-  endTime: string
-): number => {
-  try {
-    const [startHour, startMinute] = startTime.split(":").map(Number);
-    const [endHour, endMinute] = endTime.split(":").map(Number);
-
-    return endHour * 60 + endMinute - (startHour * 60 + startMinute);
-  } catch (err) {
-    return 0;
-  }
+const getSeconds = (time: string) => {
+  const [hours, minutes, seconds] = time.split(":").map(Number);
+  return hours * 60 * 60 + minutes * 60 + seconds;
 };
 
-export const getHoursAndMinutes = (minutes: number) => {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
+export const getDifferenceInSeconds = (startTime: string, endTime: string) =>
+  getSeconds(endTime) - getSeconds(startTime);
 
-  return { h, m };
+const getHoursMinutesAndSeconds = (seconds: number) => {
+  const h = Math.floor(seconds / 60 / 60);
+  const m = Math.floor((seconds - h * 60 * 60) / 60);
+  const s = seconds - h * 60 * 60 - m * 60;
+  return { h, m, s };
 };
 
-export const getHoursMinutesText = (minutes: number) => {
-  const { h, m } = getHoursAndMinutes(Math.abs(minutes));
-  return `${Math.sign(minutes) === -1 ? "-" : ""}${h}h ${m
+export const getHoursMinutesSecondsText = (seconds: number) => {
+  const { h, m, s } = getHoursMinutesAndSeconds(Math.abs(seconds));
+  return `${Math.sign(seconds) === -1 ? "-" : ""}${h}h ${m}m ${s
     .toString()
-    .padStart(2, "0")}m`;
+    .padStart(2, "0")}s`;
 };
 
-export const getEndTime = (startTime: string, remainingMinutes: number) => {
+export const getEndTime = (startTime: string, remainingSeconds: number = 0) => {
   try {
-    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [startHour, startMinute, startSeconds] = startTime
+      .split(":")
+      .map(Number);
     const today = new Date();
     const date = new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate(),
       startHour,
-      startMinute + remainingMinutes
+      startMinute,
+      startSeconds + remainingSeconds
     );
 
     return new Intl.DateTimeFormat(undefined, {
       hour: "numeric",
       minute: "numeric",
+      second: "numeric",
       hour12: true,
     }).format(date);
   } catch (err) {

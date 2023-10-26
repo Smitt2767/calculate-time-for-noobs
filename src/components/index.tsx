@@ -8,19 +8,19 @@ export const AppWrapper = styled.div`
 `;
 
 export const Title = styled.h1`
-  text-align: center;
   font-size: 20px;
   background: -webkit-linear-gradient(
     rgba(255, 255, 255, 0.7),
     rgba(255, 255, 255, 0.1)
   );
+  flex-grow: 1;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
 
 export const Container = styled.div`
   width: 90%;
-  max-width: 445px;
+  max-width: fit-content;
   background-color: rgba(255, 255, 255, 0.08);
   padding: 16px;
   border-radius: 8px;
@@ -42,6 +42,7 @@ type ButtonProps = {
   $icon?: boolean;
   $transparent?: boolean;
   $size?: "default" | "lg";
+  $hidden?: boolean;
 };
 
 export const Button = styled.button<ButtonProps>`
@@ -68,6 +69,12 @@ export const Button = styled.button<ButtonProps>`
       padding: 10px 14px;
       border-radius: 4px;
     `}
+  ${({ $hidden }) =>
+    $hidden &&
+    css`
+      pointer-events: none;
+      visibility: hidden;
+    `}
 `;
 
 export const InputWrapper = styled.div`
@@ -89,4 +96,29 @@ export const Form = styled.form`
   background-color: rgba(0, 0, 0, 0.3);
   padding: 16px;
   border-radius: 8px;
+  gap: 16px;
+`;
+
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border-radius: 8px;
+`;
+
+export const GithubLink = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99px;
+  cursor: pointer;
+  & svg {
+    fill: #ffffff80;
+    transition: all 0.3s;
+  }
+  &:hover svg {
+    fill: #ffffffde;
+  }
 `;

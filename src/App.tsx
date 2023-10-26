@@ -5,23 +5,28 @@ import {
   Container,
   Form,
   FormItem,
+  GithubLink,
   Input,
   InputWrapper,
   Title,
+  TitleContainer,
 } from "./components";
 import { ReactComponent as ArrowDownLeft } from "./assets/icons/arrow-down-left-thin.svg";
 import { ReactComponent as ArrowUpRight } from "./assets/icons/arrow-up-right-thin.svg";
 import { ReactComponent as Trash } from "./assets/icons/trash-thin.svg";
+import { ReactComponent as Github } from "./assets/icons/github-logo-fill.svg";
 import {
   Storage,
-  getDifferenceInMinutes,
+  getDifferenceInSeconds,
   getEndTime,
-  getHoursMinutesText,
+  getHoursMinutesSecondsText,
 } from "./utils";
 import { useLayoutEffect, useState } from "react";
 import LogInfo, { LogInfoProps } from "./components/LogInfo";
 
-const TOTAL_MINUTES = 8 * 60 + 30;
+const TOTAL_SECONDS = 8 * 60 * 60 + 30 * 60;
+const GITHUB_REPO_LINK =
+  "https://github.com/Smitt2767/calculate-time-for-noobs";
 
 type Entry = [string | null, string | null];
 
@@ -73,10 +78,10 @@ function App() {
   }, [replace]);
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({ entries }) => {
-    let completedMinutes = 0;
+    let completedSeconds = 0;
     entries.forEach((entry) => {
       if (entry.every(Boolean)) {
-        completedMinutes += getDifferenceInMinutes(
+        completedSeconds += getDifferenceInSeconds(
           entry[0] as string,
           entry[1] as string
         );
@@ -87,22 +92,23 @@ function App() {
     const lastInLog = entries[entries.length - 1][0];
     const lastOutLog = entries[entries.length - 1][1];
 
-    const remainingMinutes = TOTAL_MINUTES - completedMinutes;
-    const effectiveMinutes = completedMinutes;
-    const grossMinutes =
+    const remainingSeconds = TOTAL_SECONDS - completedSeconds;
+    const effectiveSeconds = completedSeconds;
+
+    const grossSeconds =
       firstInLog && (lastOutLog || lastInLog)
-        ? getDifferenceInMinutes(
+        ? getDifferenceInSeconds(
             firstInLog as string,
             (lastOutLog || lastInLog) as string
           )
         : 0;
     const endTime =
-      lastInLog && !lastOutLog ? getEndTime(lastInLog, remainingMinutes) : "";
+      lastInLog && !lastOutLog ? getEndTime(lastInLog, remainingSeconds) : "";
 
     const info = {
-      effectiveHours: getHoursMinutesText(effectiveMinutes),
-      grossHours: getHoursMinutesText(grossMinutes),
-      remainingHours: getHoursMinutesText(remainingMinutes),
+      effectiveHours: getHoursMinutesSecondsText(effectiveSeconds),
+      grossHours: getHoursMinutesSecondsText(grossSeconds),
+      remainingHours: getHoursMinutesSecondsText(remainingSeconds),
       endTime,
     };
 
@@ -122,7 +128,12 @@ function App() {
   return (
     <AppWrapper>
       <Container>
-        <Title>Calculate Hours</Title>
+        <TitleContainer>
+          <Title>Calculate Hours</Title>
+          <GithubLink target="_blank" href={GITHUB_REPO_LINK}>
+            <Github height={20} width={20} />
+          </GithubLink>
+        </TitleContainer>
         <LogInfo {...logInfo} />
         <Form id="track-log-form" onSubmit={handleSubmit(onSubmit)}>
           {fields.map((filed, index) => (
@@ -131,6 +142,7 @@ function App() {
                 <ArrowDownLeft fill="#86c06a" height={24} width={24} />
                 <Input
                   type="time"
+                  step={1}
                   {...register(`entries.${index}.0` as const)}
                 />
               </InputWrapper>
@@ -138,19 +150,19 @@ function App() {
                 <ArrowUpRight fill="#fa5f5f" height={24} width={24} />
                 <Input
                   type="time"
+                  step={1}
                   {...register(`entries.${index}.1` as const)}
                 />
               </InputWrapper>
-              {fields.length > 1 && (
-                <Button
-                  $icon
-                  $transparent
-                  type="button"
-                  onClick={() => remove(index)}
-                >
-                  <Trash fill="#fa5f5f" height={20} width={20} />
-                </Button>
-              )}
+              <Button
+                $icon
+                $transparent
+                $hidden={fields.length <= 1}
+                type="button"
+                onClick={() => remove(index)}
+              >
+                <Trash fill="#fa5f5f" height={20} width={20} />
+              </Button>
             </FormItem>
           ))}
           <div style={{ display: "flex", gap: 12 }}>
