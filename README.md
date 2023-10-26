@@ -3,4 +3,5 @@
 [Preview Website](https://calculate-time-for-noobs.netlify.app/)
 
 <br />
+
 ![Calculate Hours](https://github.com/Smitt2767/calculate-time-for-noobs/blob/main/public/calc-time-for-noobs.png?raw=true)
