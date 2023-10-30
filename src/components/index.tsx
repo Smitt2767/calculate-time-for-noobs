@@ -1,10 +1,15 @@
 import styled, { css } from "styled-components";
 
+const MOBILE = "550px";
+
 export const AppWrapper = styled.div`
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  @media (min-width: ${MOBILE}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const Title = styled.h1`
@@ -22,6 +27,15 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media (max-width: ${MOBILE}) {
+    width: 100%;
+    border-radius: 0;
+    min-height: 100vh;
+    padding: 12px;
+    max-width: unset;
+    gap: 12px;
+  }
 `;
 
 export const Input = styled.input`
@@ -30,7 +44,7 @@ export const Input = styled.input`
   padding: 8px 12px;
   border-radius: 4px;
   color: inherit;
-  width: 100%;
+  flex-grow: 1;
 `;
 
 type ButtonProps = {
@@ -84,13 +98,35 @@ export const InputWrapper = styled.div`
   gap: 8px;
   flex-grow: 1;
   flex-shrink: 0;
+
+  @media (max-width: ${MOBILE}) {
+    align-self: stretch;
+  }
+`;
+
+export const FormItemWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (max-width: ${MOBILE}) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px;
+  }
 `;
 
 export const FormItem = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 16px;
+  flex-grow: 1;
+
+  @media (max-width: ${MOBILE}) {
+    gap: 8px;
+    flex-direction: column;
+    align-items: start;
+  }
 `;
 
 export const Form = styled.form`
@@ -98,6 +134,11 @@ export const Form = styled.form`
   padding: 16px;
   border-radius: 8px;
   gap: 16px;
+  flex-grow: 1;
+
+  @media (max-width: ${MOBILE}) {
+    padding: 0;
+  }
 `;
 
 export const TitleContainer = styled.div`
@@ -107,6 +148,7 @@ export const TitleContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
   padding: 16px;
   border-radius: 8px;
+  flex-shrink: 0;
 `;
 
 export const GithubLink = styled.a`
@@ -121,5 +163,15 @@ export const GithubLink = styled.a`
   }
   &:hover svg {
     fill: #ffffffde;
+  }
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+
+  @media (max-width: ${MOBILE}) {
+    padding: 0px 16px 16px;
   }
 `;
