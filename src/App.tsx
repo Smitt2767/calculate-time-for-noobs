@@ -23,7 +23,7 @@ import {
   getEndTime,
   getHoursMinutesSecondsText,
 } from "./utils";
-import React, { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import LogInfo, { LogInfoProps } from "./components/LogInfo";
 
 const TOTAL_SECONDS = 8 * 60 * 60 + 30 * 60;
