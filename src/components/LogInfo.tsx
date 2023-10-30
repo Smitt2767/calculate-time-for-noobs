@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+  flex-shrink: 0;
 `;
 
 const LogWrapper = styled.div`

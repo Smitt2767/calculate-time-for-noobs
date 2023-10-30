@@ -2,9 +2,11 @@ import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import {
   AppWrapper,
   Button,
+  ButtonWrapper,
   Container,
   Form,
   FormItem,
+  FormItemWrapper,
   GithubLink,
   Input,
   InputWrapper,
@@ -134,23 +136,25 @@ function App() {
         <LogInfo {...logInfo} />
         <Form id="track-log-form" onSubmit={handleSubmit(onSubmit)}>
           {fields.map((filed, index) => (
-            <FormItem key={filed.id}>
-              <InputWrapper>
-                <ArrowDownLeft fill="#86c06a" height={24} width={24} />
-                <Input
-                  type="time"
-                  step={1}
-                  {...register(`entries.${index}.0` as const)}
-                />
-              </InputWrapper>
-              <InputWrapper>
-                <ArrowUpRight fill="#fa5f5f" height={24} width={24} />
-                <Input
-                  type="time"
-                  step={1}
-                  {...register(`entries.${index}.1` as const)}
-                />
-              </InputWrapper>
+            <FormItemWrapper key={filed.id}>
+              <FormItem>
+                <InputWrapper>
+                  <ArrowDownLeft fill="#86c06a" height={24} width={24} />
+                  <Input
+                    type="time"
+                    step={1}
+                    {...register(`entries.${index}.0` as const)}
+                  />
+                </InputWrapper>
+                <InputWrapper>
+                  <ArrowUpRight fill="#fa5f5f" height={24} width={24} />
+                  <Input
+                    type="time"
+                    step={1}
+                    {...register(`entries.${index}.1` as const)}
+                  />
+                </InputWrapper>
+              </FormItem>
               <Button
                 $icon
                 $transparent
@@ -160,22 +164,16 @@ function App() {
               >
                 <Trash fill="#fa5f5f" height={20} width={20} />
               </Button>
-            </FormItem>
+            </FormItemWrapper>
           ))}
-          <div
-            style={{
-              display: "flex",
-              gap: 16,
-              justifyContent: "space-between",
-            }}
-          >
+          <ButtonWrapper>
             <Button type="button" onClick={handleAddLog}>
               Add Log
             </Button>
             <Button type="button" onClick={handleReset}>
               Clear all Logs
             </Button>
-          </div>
+          </ButtonWrapper>
         </Form>
 
         <Button $fullWidth $size="lg" type="submit" form="track-log-form">
