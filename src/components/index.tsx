@@ -45,6 +45,7 @@ export const Input = styled.input`
   border-radius: 4px;
   color: inherit;
   flex-grow: 1;
+  min-width: 150px;
 `;
 
 type ButtonProps = {
